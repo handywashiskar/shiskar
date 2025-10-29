@@ -59,10 +59,6 @@ document.getElementById('calendar-btn').onclick = () => {
   location.hash = 'calendar';
 };
 
-document.getElementById('calendar-btn').onclick = () => {
-  location.hash = 'calendar';
-};
-
 document.getElementById('notifications-btn').onclick = () => {
   location.hash = 'notifications';
 };
