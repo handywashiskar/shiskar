@@ -1,4 +1,7 @@
 export function render(app) {
+  // Prevent scrolling while intro is active
+  document.body.classList.add('intro-active');
+
   app.innerHTML = `
     <section id="intro-card" class="fade-in">
       <h1 class="intro-title">Welcome to Shiskar Studio</h1>
@@ -15,19 +18,19 @@ export function render(app) {
     </div>
   `;
 
-  // Animation trigger
+  // Animate card appearance
   setTimeout(() => {
     document.getElementById('intro-card')?.classList.add('visible');
   }, 100);
 
-  // Connectivity check
+  // Show offline warning after delay
   setTimeout(() => {
     if (!navigator.onLine) {
       document.getElementById('offline-warning')?.classList.remove('hidden');
     }
   }, 3000);
 
-  // Auth check
+  // Check for authenticated user
   const user = localStorage.getItem('shiskarUser');
   if (user) {
     const username = JSON.parse(user).username || 'User';
@@ -37,6 +40,7 @@ export function render(app) {
     app.appendChild(message);
 
     setTimeout(() => {
+      document.body.classList.remove('intro-active');
       location.hash = 'music';
     }, 2000);
     return;
@@ -44,10 +48,12 @@ export function render(app) {
 
   // Button actions
   document.getElementById('get-started-btn').onclick = () => {
+    document.body.classList.remove('intro-active');
     location.hash = 'auth';
   };
 
   document.getElementById('login-btn').onclick = () => {
+    document.body.classList.remove('intro-active');
     location.hash = 'auth';
   };
 }
