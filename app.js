@@ -64,3 +64,12 @@ document.querySelectorAll('#hamburger-menu button').forEach(btn => {
     document.getElementById('hamburger-menu').classList.add('hidden');
   });
 });
+
+// Auto-collapse hamburger menu when clicking outside
+document.addEventListener('click', (e) => {
+  const menu = document.getElementById('hamburger-menu');
+  const toggle = document.getElementById('hamburger-btn');
+  if (!menu.contains(e.target) && e.target !== toggle) {
+    menu.classList.add('hidden');
+  }
+});
