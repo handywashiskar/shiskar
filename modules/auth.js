@@ -25,6 +25,11 @@ export function render(app) {
         </select>
         <select id="country" required>
           <option value="">Select Country</option>
+          <option>Kenya</option>
+          <option>Tanzania</option>
+          <option>Uganda</option>
+          <option>Rwanda</option>
+          <option>Other</option>
         </select>
         <input type="tel" id="mobile" placeholder="Mobile Number (Optional)">
         <input type="email" id="comm-email" placeholder="Communication Email" required>
@@ -80,56 +85,6 @@ export function render(app) {
   if (!navigator.onLine) {
     document.getElementById('offline-warning')?.classList.remove('hidden');
   }
-
-  // Delay country dropdown population until DOM is ready
-  setTimeout(() => {
-    const countrySelect = document.getElementById('country');
-    if (!countrySelect) return;
-
-    const countries = [
-      "Kenya", "Tanzania", "Uganda", "Rwanda", "Nigeria", "South Africa", "United States", "United Kingdom",
-      "India", "Japan", "Germany", "France", "Brazil", "Canada", "Australia", "China", "Mexico", "Italy", "Spain", "Netherlands"
-    ];
-    const flagMap = {
-      Kenya: "🇰🇪", Tanzania: "🇹🇿", Uganda: "🇺🇬", Rwanda: "🇷🇼", Nigeria: "🇳🇬",
-      South Africa: "🇿🇦", United States: "🇺🇸", United Kingdom: "🇬🇧", India: "🇮🇳",
-      Japan: "🇯🇵", Germany: "🇩🇪", France: "🇫🇷", Brazil: "🇧🇷", Canada: "🇨🇦",
-      Australia: "🇦🇺", China: "🇨🇳", Mexico: "🇲🇽", Italy: "🇮🇹", Spain: "🇪🇸", Netherlands: "🇳🇱"
-    };
-
-    countries.forEach(country => {
-      const option = document.createElement('option');
-      const flag = flagMap[country] || '';
-      option.value = country;
-      option.textContent = `${flag} ${country}`;
-      countrySelect.appendChild(option);
-    });
-
-    // Autodetect country using LocationIQ
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(async (position) => {
-        const { latitude, longitude } = position.coords;
-        try {
-          const response = await fetch(`https://us1.locationiq.com/v1/reverse.php?key=pk.7671d0910cbf8ff1a76b93abe73e35ae&lat=${latitude}&lon=${longitude}&format=json`);
-          const data = await response.json();
-          const country = data?.address?.country;
-
-          if (country) {
-            for (let option of countrySelect.options) {
-              if (option.textContent.includes(country)) {
-                option.selected = true;
-                break;
-              }
-            }
-          }
-        } catch (err) {
-          console.warn('Location detection failed:', err);
-        }
-      }, err => {
-        console.warn('Geolocation error:', err);
-      });
-    }
-  }, 0);
 
   // Login logic
   loginForm.onsubmit = (e) => {
@@ -196,4 +151,4 @@ export function render(app) {
     localStorage.setItem('shiskarUser', JSON.stringify({ email: 'googleuser@shiskar.com' }));
     location.hash = 'music';
   };
-      }
+        }
