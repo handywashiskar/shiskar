@@ -1,2 +1,2 @@
 const app = document.getElementById('app');
-app.innerHTML = `<h2>✅ JavaScript is working</h2><p>If you see this, the issue is with module imports.</p>`;
+app.innerHTML = `<h1>✅ JavaScript is working</h1><p>This confirms your setup is correct.</p>`;
