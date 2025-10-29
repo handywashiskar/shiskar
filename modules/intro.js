@@ -30,24 +30,26 @@ export function render(app) {
   // Check for authenticated user
   const user = localStorage.getItem('shiskarUser');
   if (user) {
-    const username = JSON.parse(user).username || 'User';
-    const message = document.createElement('p');
-    message.textContent = `✅ ${username} detected and verified. Redirecting...`;
-    message.className = 'verified-message';
-    app.appendChild(message);
-
-    setTimeout(() => {
-      location.hash = 'music';
-    }, 2000);
+    location.hash = 'auth'; // Redirect to login view inside auth.js
     return;
   }
 
   // Button actions
   document.getElementById('get-started-btn').onclick = () => {
-    location.hash = 'auth';
+    const authCard = document.getElementById('auth-card');
+    if (authCard) {
+      document.getElementById('signup-link')?.click(); // Switch to Sign-Up
+    } else {
+      location.hash = 'auth';
+    }
   };
 
   document.getElementById('login-btn').onclick = () => {
-    location.hash = 'auth';
+    const authCard = document.getElementById('auth-card');
+    if (authCard) {
+      document.getElementById('login-link')?.click(); // Switch to Login
+    } else {
+      location.hash = 'auth';
+    }
   };
 }
