@@ -45,24 +45,22 @@ window.addEventListener('hashchange', () => {
 const initialModule = location.hash.replace('#', '') || 'intro';
 loadModule(initialModule);
 
+// Footer navigation
 document.querySelectorAll('.nav-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     location.hash = btn.dataset.module;
   });
 });
 
-document.getElementById('settings-btn').onclick = () => {
-  location.hash = 'settings';
-};
+// Hamburger menu toggle
+document.getElementById('hamburger-btn').addEventListener('click', () => {
+  document.getElementById('hamburger-menu').classList.toggle('hidden');
+});
 
-document.getElementById('calendar-btn').onclick = () => {
-  location.hash = 'calendar';
-};
-
-document.getElementById('notifications-btn').onclick = () => {
-  location.hash = 'notifications';
-};
-
-document.getElementById('profile-btn').onclick = () => {
-  location.hash = 'profile';
-};
+// Hamburger menu navigation
+document.querySelectorAll('#hamburger-menu button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    location.hash = btn.dataset.module;
+    document.getElementById('hamburger-menu').classList.add('hidden');
+  });
+});
