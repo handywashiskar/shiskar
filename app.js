@@ -37,12 +37,27 @@ function loadModule(name) {
   }
 }
 
-document.querySelectorAll('.nav-btn').forEach(btn => {
-  btn.addEventListener('click', () => loadModule(btn.dataset.module));
+// Listen for hash changes
+window.addEventListener('hashchange', () => {
+  const moduleName = location.hash.replace('#', '') || 'intro';
+  loadModule(moduleName);
 });
 
-document.getElementById('notifications-btn').onclick = () => loadModule('notifications');
-document.getElementById('profile-btn').onclick = () => loadModule('profile');
-
 // Initial load
-loadModule('intro');
+const initialModule = location.hash.replace('#', '') || 'intro';
+loadModule(initialModule);
+
+// Update hash when buttons are clicked
+document.querySelectorAll('.nav-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    location.hash = btn.dataset.module;
+  });
+});
+
+document.getElementById('notifications-btn').onclick = () => {
+  location.hash = 'notifications';
+};
+
+document.getElementById('profile-btn').onclick = () => {
+  location.hash = 'profile';
+};
