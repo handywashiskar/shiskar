@@ -1,20 +1,15 @@
 export function render(app) {
+  const userExists = localStorage.getItem('shiskarUser');
+
   app.innerHTML = `
     <section id="auth-card">
       <h2 id="auth-title">Welcome to Shiskar Studio</h2>
-      <div class="auth-toggle">
-        <button id="show-login" class="active">Log In</button>
-        <button id="show-signup">Sign Up</button>
+
+      <div id="switch-to-login" class="auth-switch">
+        Already have an account? <button id="login-link">Log In</button>
       </div>
 
-      <form id="login-form" class="auth-form visible">
-        <input type="email" id="login-email" placeholder="Email" required>
-        <input type="password" id="login-password" placeholder="Password" required>
-        <button type="submit">Log In</button>
-        <button type="button" id="google-login">Sign in with Google</button>
-      </form>
-
-      <form id="signup-form" class="auth-form hidden">
+      <form id="signup-form" class="auth-form ${userExists ? 'hidden' : 'visible'}">
         <input type="email" id="signup-email" placeholder="Email" required>
         <input type="password" id="signup-password" placeholder="Password" required>
         <input type="password" id="signup-confirm" placeholder="Confirm Password" required>
@@ -43,6 +38,21 @@ export function render(app) {
 
         <button type="submit">Sign Up</button>
         <button type="button" id="google-signup">Sign up with Google</button>
+
+        <div class="auth-switch">
+          Already have an account? <button id="login-link-bottom">Log In</button>
+        </div>
+      </form>
+
+      <form id="login-form" class="auth-form ${userExists ? 'visible' : 'hidden'}">
+        <input type="email" id="login-email" placeholder="Email" required>
+        <input type="password" id="login-password" placeholder="Password" required>
+        <button type="submit">Log In</button>
+        <button type="button" id="google-login">Sign in with Google</button>
+
+        <div class="auth-switch">
+          New here? <button id="signup-link">Create Account</button>
+        </div>
       </form>
 
       <div id="offline-warning" class="floating-warning hidden">
@@ -51,20 +61,21 @@ export function render(app) {
     </section>
   `;
 
-  // Toggle logic
   const loginForm = document.getElementById('login-form');
   const signupForm = document.getElementById('signup-form');
-  document.getElementById('show-login').onclick = () => {
-    loginForm.classList.remove('hidden');
+
+  // Manual switches
+  document.getElementById('login-link').onclick = () => {
     signupForm.classList.add('hidden');
-    document.getElementById('show-login').classList.add('active');
-    document.getElementById('show-signup').classList.remove('active');
+    loginForm.classList.remove('hidden');
   };
-  document.getElementById('show-signup').onclick = () => {
-    signupForm.classList.remove('hidden');
+  document.getElementById('login-link-bottom').onclick = () => {
+    signupForm.classList.add('hidden');
+    loginForm.classList.remove('hidden');
+  };
+  document.getElementById('signup-link').onclick = () => {
     loginForm.classList.add('hidden');
-    document.getElementById('show-signup').classList.add('active');
-    document.getElementById('show-login').classList.remove('active');
+    signupForm.classList.remove('hidden');
   };
 
   // Offline detection
@@ -73,7 +84,7 @@ export function render(app) {
   }
 
   // Login logic
-  document.getElementById('login-form').onsubmit = (e) => {
+  loginForm.onsubmit = (e) => {
     e.preventDefault();
     const email = document.getElementById('login-email').value;
     const password = document.getElementById('login-password').value;
@@ -84,7 +95,7 @@ export function render(app) {
   };
 
   // Sign-up logic
-  document.getElementById('signup-form').onsubmit = (e) => {
+  signupForm.onsubmit = (e) => {
     e.preventDefault();
     const termsAccepted = document.getElementById('terms-checkbox').checked;
     if (!termsAccepted) {
@@ -122,4 +133,4 @@ export function render(app) {
     localStorage.setItem('shiskarUser', JSON.stringify({ email: 'googleuser@shiskar.com' }));
     location.hash = 'music';
   };
-  }
+}
