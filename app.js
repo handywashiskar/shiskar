@@ -30,7 +30,11 @@ const routes = {
 
 function loadModule(name) {
   app.innerHTML = '';
-  if (routes[name]) routes[name](app);
+  if (routes[name]) {
+    routes[name](app);
+  } else {
+    app.innerHTML = `<p>⚠️ Module "${name}" not found.</p>`;
+  }
 }
 
 document.querySelectorAll('.nav-btn').forEach(btn => {
