@@ -14,7 +14,10 @@ export function render(app) {
         <input type="password" id="signup-password" placeholder="Password" required>
         <input type="password" id="signup-confirm" placeholder="Confirm Password" required>
         <input type="text" id="artist-name" placeholder="Artist Name (Unique)" required>
+
+        <label for="dob">Date of Birth</label>
         <input type="date" id="dob" required>
+
         <select id="gender" required>
           <option value="">Select Gender</option>
           <option>Male</option>
@@ -97,9 +100,24 @@ export function render(app) {
   // Sign-up logic
   signupForm.onsubmit = (e) => {
     e.preventDefault();
+
     const termsAccepted = document.getElementById('terms-checkbox').checked;
     if (!termsAccepted) {
       alert('You must accept the Terms and Conditions to sign up.');
+      return;
+    }
+
+    const dobInput = document.getElementById('dob').value;
+    const dob = new Date(dobInput);
+    const today = new Date();
+    let age = today.getFullYear() - dob.getFullYear();
+    const m = today.getMonth() - dob.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+      age--;
+    }
+
+    if (age < 13) {
+      alert('You must be at least 13 years old to create an account.');
       return;
     }
 
