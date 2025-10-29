@@ -196,4 +196,4 @@ export function render(app) {
     localStorage.setItem('shiskarUser', JSON.stringify({ email: 'googleuser@shiskar.com' }));
     location.hash = 'music';
   };
-}
+      }
