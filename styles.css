@@ -1,11 +1,9 @@
-/* Global styles, header, footer, layout, dark mode, transitions */
 body {
   font-family: 'Segoe UI', sans-serif;
   background-color: #fdf6e3;
   color: #1e1b18;
   margin: 0;
   padding-bottom: 70px;
-  transition: background-color 0.3s ease;
 }
 
 header {
@@ -61,4 +59,9 @@ header {
   color: #1e1b18;
   box-shadow: 0 0 12px #ff6f61;
   transform: translateY(-2px);
+}
+
+main {
+  margin-top: 70px;
+  padding: 20px;
 }
