@@ -6,15 +6,9 @@ body {
   background-color: #fdf6e3;
   color: #1e1b18;
   margin: 0;
-  padding-bottom: 70px;
+  padding: 0;
   max-width: 100vw;
   overflow-x: hidden;
-}
-
-/* Prevent scroll during intro */
-body.intro-active {
-  overflow: hidden;
-  height: 100vh;
 }
 
 /* Header */
@@ -86,13 +80,24 @@ header {
   cursor: pointer;
 }
 
+/* Main content area */
+main#app {
+  position: relative;
+  top: 60px;
+  bottom: 70px;
+  padding: 16px;
+  box-sizing: border-box;
+  min-height: calc(100vh - 130px);
+  overflow-y: auto;
+}
+
 /* Intro screen */
 #intro-card {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: calc(100vh - 130px);
   background-color: #fdf6e3;
   display: flex;
   flex-direction: column;
@@ -233,4 +238,4 @@ header {
   #hamburger-menu button {
     font-size: 0.95em;
   }
-    }
+}
