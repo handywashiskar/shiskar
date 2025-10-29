@@ -14,7 +14,7 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 16px;
+  padding: 12px 16px; /* Equal left/right padding */
   background: linear-gradient(to right, #2c3e50, #1e1b18);
   color: #fdf6e3;
   position: fixed;
@@ -35,7 +35,7 @@ header {
 /* Header icons */
 #header-icons {
   display: flex;
-  gap: 8px;
+  gap: 12px;
   align-items: center;
   justify-content: flex-end;
   flex-wrap: nowrap;
@@ -72,7 +72,7 @@ main {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 8px;
+  padding: 10px 16px; /* Equal left/right padding */
   box-shadow: 0 -2px 6px rgba(0,0,0,0.4);
   z-index: 1000;
   overflow-x: auto;
