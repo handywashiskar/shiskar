@@ -24,7 +24,6 @@ export function render(app) {
           <option value="">Select Gender</option>
           <option>Male</option>
           <option>Female</option>
-          <option>Other</option>
         </select>
         <select id="country" required>
           <option value="">Select Country</option>
