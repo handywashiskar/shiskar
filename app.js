@@ -1,31 +1,11 @@
-import { render as intro } from './modules/intro.js';
-import { render as auth } from './modules/auth.js';
-import { render as music } from './modules/music.js';
-import { render as offlineMusic } from './modules/offline-music.js';
-import { render as video } from './modules/video.js';
-import { render as calendar } from './modules/calendar.js';
-import { render as youtube } from './modules/youtube.js';
-import { render as research } from './modules/research.js';
-import { render as notepad } from './modules/notepad.js';
 import { render as settings } from './modules/settings.js';
-import { render as notifications } from './modules/notifications.js';
-import { render as profile } from './modules/profile.js';
+import { render as calendar } from './modules/calendar.js';
 
 const app = document.getElementById('app');
 
 const routes = {
-  intro,
-  auth,
-  music,
-  'offline-music': offlineMusic,
-  video,
-  calendar,
-  youtube,
-  research,
-  notepad,
   settings,
-  notifications,
-  profile
+  calendar
 };
 
 function loadModule(name) {
@@ -37,27 +17,27 @@ function loadModule(name) {
   }
 }
 
-// Listen for hash changes
+// Load module based on hash
 window.addEventListener('hashchange', () => {
-  const moduleName = location.hash.replace('#', '') || 'intro';
+  const moduleName = location.hash.replace('#', '') || 'settings';
   loadModule(moduleName);
 });
 
 // Initial load
-const initialModule = location.hash.replace('#', '') || 'intro';
+const initialModule = location.hash.replace('#', '') || 'settings';
 loadModule(initialModule);
 
-// Update hash when buttons are clicked
+// Button clicks update hash
 document.querySelectorAll('.nav-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     location.hash = btn.dataset.module;
   });
 });
 
-document.getElementById('notifications-btn').onclick = () => {
-  location.hash = 'notifications';
+document.getElementById('settings-btn').onclick = () => {
+  location.hash = 'settings';
 };
 
-document.getElementById('profile-btn').onclick = () => {
-  location.hash = 'profile';
+document.getElementById('calendar-btn').onclick = () => {
+  location.hash = 'calendar';
 };
