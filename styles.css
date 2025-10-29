@@ -27,13 +27,24 @@ header {
   font-weight: bold;
 }
 
+#header-icons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: nowrap;
+  max-width: 50vw;
+  overflow-x: auto;
+}
+
 #header-icons button {
   background: none;
   border: none;
   color: #fdf6e3;
-  font-size: 1.5em;
-  margin-left: 10px;
+  font-size: 1.4em;
+  padding: 6px;
   cursor: pointer;
+  flex-shrink: 0;
 }
 
 /* Main content */
