@@ -3,10 +3,25 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Shiskar Studio Test</title>
+  <title>Shiskar Studio</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <header>
+    <div id="branding">Shiskar Studio</div>
+    <div id="header-icons">
+      <button id="settings-btn">⚙️</button>
+      <button id="calendar-btn">📅</button>
+    </div>
+  </header>
+
   <main id="app"></main>
+
+  <nav id="footerNav">
+    <button class="nav-btn" data-module="settings">⚙️<span>Settings</span></button>
+    <button class="nav-btn" data-module="calendar">📅<span>Calendar</span></button>
+  </nav>
+
   <script type="module" src="app.js"></script>
 </body>
 </html>
