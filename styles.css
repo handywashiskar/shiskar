@@ -96,3 +96,37 @@ main {
     font-size: 1.3em;
   }
 }
+
+#header-icons {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+#header-icons button {
+  background: none;
+  border: none;
+  color: #fdf6e3;
+  font-size: 1.5em;
+  cursor: pointer;
+}
+
+#footerNav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 10px;
+  padding: 12px;
+}
+
+.nav-btn {
+  background: #2c3e50;
+  color: #fdf6e3;
+  border: none;
+  border-radius: 12px;
+  padding: 10px;
+  font-size: 1.4em;
+  width: 14%;
+  min-width: 50px;
+  text-align: center;
+}
