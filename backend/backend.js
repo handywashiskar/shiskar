@@ -2,11 +2,14 @@ const express = require('express');
 const multer = require('multer');
 const crypto = require('crypto');
 const axios = require('axios');
+const cors = require('cors');
 const app = express();
 const upload = multer();
 
-const KEY_ID = '006f75089442ae10000000001';
-const APP_KEY = 'K006n6bV6vzrmXGoPQgjw/K2w1ebv40';
+app.use(cors());
+
+const KEY_ID = '🆔🆔🆔';
+const APP_KEY = '🔐🔐🔐';
 const BUCKET_ID = 'your-bucket-id';
 const BUCKET_NAME = 'your-bucket-name';
 
@@ -30,23 +33,28 @@ async function getUploadUrl() {
 }
 
 app.post('/upload', upload.single('file'), async (req, res) => {
-  if (!authData) await authorizeB2();
-  const uploadData = await getUploadUrl();
+  try {
+    if (!authData) await authorizeB2();
+    const uploadData = await getUploadUrl();
 
-  const sha1 = crypto.createHash('sha1').update(req.file.buffer).digest('hex');
-  const fileName = `${Date.now()}-${req.file.originalname}`;
+    const sha1 = crypto.createHash('sha1').update(req.file.buffer).digest('hex');
+    const fileName = `${Date.now()}-${req.file.originalname}`;
 
-  const uploadRes = await axios.post(uploadData.uploadUrl, req.file.buffer, {
-    headers: {
-      Authorization: uploadData.authorizationToken,
-      'X-Bz-File-Name': fileName,
-      'Content-Type': req.file.mimetype,
-      'X-Bz-Content-Sha1': sha1
-    }
-  });
+    await axios.post(uploadData.uploadUrl, req.file.buffer, {
+      headers: {
+        Authorization: uploadData.authorizationToken,
+        'X-Bz-File-Name': fileName,
+        'Content-Type': req.file.mimetype,
+        'X-Bz-Content-Sha1': sha1
+      }
+    });
 
-  const publicUrl = `https://f000.backblazeb2.com/file/${BUCKET_NAME}/${fileName}`;
-  res.json({ url: publicUrl });
+    const publicUrl = `https://f000.backblazeb2.com/file/${BUCKET_NAME}/${fileName}`;
+    res.json({ url: publicUrl });
+  } catch (err) {
+    console.error('Upload error:', err.message);
+    res.status(500).json({ error: 'Upload failed' });
+  }
 });
 
 app.listen(3000, () => console.log('Backend running on port 3000'));
