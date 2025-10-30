@@ -8,8 +8,7 @@ export function renderMusic(app) {
       <div id="folder-tabs"></div>
       <ul id="song-list"></ul>
       <button id="add-music-btn">➕ Add Music</button>
-      <div id="music-form" class="hidden">
-        <h3>Add New Track</h3>
+      <form id="music-form" class="hidden">
         <input type="text" id="title" placeholder="Title" required>
         <input type="text" id="artist" placeholder="Artist Name" required>
         <input type="text" id="folder" placeholder="Folder/Category" required>
@@ -18,9 +17,9 @@ export function renderMusic(app) {
         <input type="file" id="audio-file" accept="audio/*" required>
         <input type="file" id="artwork-file" accept="image/*">
         <div id="artwork-preview"></div>
-        <button id="submit-track">Upload Track</button>
-        <button id="cancel-form">Cancel</button>
-      </div>
+        <button type="submit">Upload Track</button>
+        <button type="button" id="cancel-form">Cancel</button>
+      </form>
     </section>
   `;
 
@@ -44,7 +43,7 @@ export function renderMusic(app) {
     reader.readAsDataURL(file);
   };
 
-  // Add music button
+  // Show form
   document.getElementById('add-music-btn').onclick = () => {
     form.classList.remove('hidden');
   };
@@ -52,15 +51,16 @@ export function renderMusic(app) {
     form.classList.add('hidden');
   };
 
-  // Upload and save track
-  document.getElementById('submit-track').onclick = async () => {
+  // Submit form
+  form.onsubmit = async (e) => {
+    e.preventDefault();
     const title = document.getElementById('title').value;
     const artist = document.getElementById('artist').value;
     const folder = document.getElementById('folder').value;
     const genre = document.getElementById('genre').value;
     const tags = document.getElementById('tags').value.split(',').map(t => t.trim());
     const audioFile = document.getElementById('audio-file').files[0];
-    const artwork = document.getElementById('artwork-file').files[0];
+    const artwork = artworkFile.files[0];
 
     if (!title || !artist || !folder || !audioFile) {
       alert('Please fill all required fields.');
@@ -74,6 +74,8 @@ export function renderMusic(app) {
     const song = { title, artist, folder, genre, tags, audioUrl, artworkUrl };
     songs.push(song);
     renderSongs();
+    form.reset();
+    artworkPreview.innerHTML = '';
     form.classList.add('hidden');
   };
 
@@ -94,7 +96,7 @@ export function renderMusic(app) {
     (filter ? filtered : songs).forEach((song, index) => {
       const li = document.createElement('li');
       li.innerHTML = `
-        <strong>${song.title}</strong> by ${song.artist} <br>
+        <strong>${song.title}</strong> by ${song.artist}<br>
         <audio controls src="${song.audioUrl}"></audio><br>
         ${song.artworkUrl ? `<img src="${song.artworkUrl}" style="max-width:80px;">` : ''}
         <button onclick="editSong(${index})">✏️ Edit</button>
@@ -104,14 +106,13 @@ export function renderMusic(app) {
     });
   }
 
-  // Folder filter
   function renderSongsByFolder(folderName) {
     const filtered = songs.filter(song => song.folder === folderName);
     songList.innerHTML = '';
     filtered.forEach((song, index) => {
       const li = document.createElement('li');
       li.innerHTML = `
-        <strong>${song.title}</strong> by ${song.artist} <br>
+        <strong>${song.title}</strong> by ${song.artist}<br>
         <audio controls src="${song.audioUrl}"></audio><br>
         ${song.artworkUrl ? `<img src="${song.artworkUrl}" style="max-width:80px;">` : ''}
         <button onclick="editSong(${index})">✏️ Edit</button>
@@ -121,12 +122,10 @@ export function renderMusic(app) {
     });
   }
 
-  // Search filter
   searchBar.oninput = () => {
     renderSongs(searchBar.value);
   };
 
-  // Edit/delete handlers
   window.editSong = (index) => {
     const song = songs[index];
     document.getElementById('title').value = song.title;
@@ -135,7 +134,7 @@ export function renderMusic(app) {
     document.getElementById('genre').value = song.genre;
     document.getElementById('tags').value = song.tags.join(', ');
     form.classList.remove('hidden');
-    songs.splice(index, 1); // Remove old entry, will re-add on submit
+    songs.splice(index, 1);
   };
 
   window.deleteSong = (index) => {
@@ -144,4 +143,4 @@ export function renderMusic(app) {
       renderSongs();
     }
   };
-      }
+                     }
