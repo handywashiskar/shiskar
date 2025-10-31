@@ -1,28 +1,43 @@
 // modules/b2.js
-// Frontend helper that posts file to your backend endpoint which handles Backblaze B2.
-// Exports uploadToB2(file) -> returns { url } or throws
+// Uploads a file to your backend endpoint with progress tracking.
+// Exports uploadToB2(file, onProgress) -> returns { url } or throws
 
-export async function uploadToB2(file) {
-  if (!file) throw new Error('No file provided to uploadToB2');
+export function uploadToB2(file, onProgress) {
+  return new Promise((resolve, reject) => {
+    if (!file) return reject(new Error('No file provided to uploadToB2'));
 
-  const formData = new FormData();
-  formData.append('file', file, file.name);
+    const formData = new FormData();
+    formData.append('file', file, file.name);
 
-  // Replace this with your actual backend upload endpoint
-  const UPLOAD_ENDPOINT = '/upload';
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', '/upload');
 
-  const res = await fetch(UPLOAD_ENDPOINT, {
-    method: 'POST',
-    body: formData
+    // Track upload progress
+    xhr.upload.onprogress = (event) => {
+      if (event.lengthComputable && typeof onProgress === 'function') {
+        const percent = Math.round((event.loaded / event.total) * 100);
+        onProgress(percent);
+      }
+    };
+
+    xhr.onload = () => {
+      if (xhr.status === 200) {
+        try {
+          const data = JSON.parse(xhr.responseText);
+          if (!data || !data.url) {
+            reject(new Error('Invalid response from upload endpoint'));
+          } else {
+            resolve(data);
+          }
+        } catch (err) {
+          reject(new Error('Failed to parse upload response'));
+        }
+      } else {
+        reject(new Error(`Upload failed: ${xhr.status} ${xhr.statusText}`));
+      }
+    };
+
+    xhr.onerror = () => reject(new Error('Network error during upload'));
+    xhr.send(formData);
   });
-
-  if (!res.ok) {
-    const text = await res.text().catch(() => '');
-    throw new Error(`Upload failed: ${res.status} ${res.statusText} ${text}`);
-  }
-
-  const data = await res.json();
-  // Expecting { url: 'https://f000.backblazeb2.com/file/bucket/file.mp3' }
-  if (!data || !data.url) throw new Error('Invalid response from upload endpoint');
-  return data;
 }
