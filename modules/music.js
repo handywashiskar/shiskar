@@ -18,7 +18,7 @@ export function render(app) {
         <input type="text" id="folder" placeholder="Folder/Category" required>
         <input type="text" id="genre" placeholder="Genre">
         <input type="text" id="tags" placeholder="Tags (comma-separated)">
-        <input type="file" id="audio-file" accept="audio/*">
+        <input type="file" id="audio-file" placeholder="audio" accept="audio/*">
         <input type="file" id="artwork-file" accept="image/*">
         <div id="artwork-preview"></div>
         <button id="submit-track">Upload Track</button>
