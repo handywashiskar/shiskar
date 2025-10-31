@@ -10,10 +10,10 @@ const axios = require('axios');
 const app = express();
 const upload = multer();
 
-const KEY_ID = '🆔🆔🆔';
-const APP_KEY = '🔐🔐🔐';
-const BUCKET_ID = 'your-bucket-id';   // replace with real bucket id
-const BUCKET_NAME = 'your-bucket-name'; // replace with real bucket name
+const KEY_ID = '006f75089442ae10000000002';
+const APP_KEY = 'K006wEei0wGjTNNsLgJ6MjBM7vxnusE';
+const BUCKET_ID = 'bf8725b0288934a492aa0e11';   // replace with real bucket id
+const BUCKET_NAME = 'Shiskarappcloud'; // replace with real bucket name
 
 let authData = null;
 let authFetchedAt = 0;
