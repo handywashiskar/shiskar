@@ -1,4 +1,3 @@
-// modules/music.js
 import { uploadToB2 } from './b2.js';
 
 export function render(app) {
@@ -18,9 +17,12 @@ export function render(app) {
         <input type="text" id="folder" placeholder="Folder/Category" required>
         <input type="text" id="genre" placeholder="Genre">
         <input type="text" id="tags" placeholder="Tags (comma-separated)">
-        <input type="file" id="audio-file" placeholder="audio" accept="audio/*">
+        <input type="file" id="audio-file" accept="audio/*">
         <input type="file" id="artwork-file" accept="image/*">
         <div id="artwork-preview"></div>
+        <div id="upload-progress" class="upload-progress hidden">
+          <div id="upload-bar" class="upload-bar"></div>
+        </div>
         <button id="submit-track">Upload Track</button>
         <button id="cancel-form">Cancel</button>
       </div>
@@ -36,6 +38,8 @@ export function render(app) {
   const form = document.getElementById('music-form');
   const artworkFile = document.getElementById('artwork-file');
   const artworkPreview = document.getElementById('artwork-preview');
+  const progressContainer = document.getElementById('upload-progress');
+  const progressBar = document.getElementById('upload-bar');
 
   artworkFile.onchange = () => {
     const file = artworkFile.files[0];
@@ -57,6 +61,8 @@ export function render(app) {
     form.classList.add('hidden');
     form.reset();
     artworkPreview.innerHTML = '';
+    progressContainer.classList.add('hidden');
+    progressBar.style.width = '0%';
     editingIndex = null;
   };
 
@@ -74,23 +80,49 @@ export function render(app) {
       return;
     }
 
-    const audioUrl = await uploadToB2(audioFile);
-    let artworkUrl = '';
-    if (artwork) artworkUrl = await uploadToB2(artwork);
+    progressContainer.classList.remove('hidden');
 
-    const song = { title, artist, folder, genre, tags, audioUrl, artworkUrl };
+    try {
+      const audioRes = await uploadToB2(audioFile, percent => {
+        progressBar.style.width = percent + '%';
+      });
 
-    if (editingIndex !== null) {
-      songs[editingIndex] = song;
-    } else {
-      songs.push(song);
+      let artworkUrl = '';
+      if (artwork) {
+        artworkUrl = (await uploadToB2(artwork, percent => {
+          progressBar.style.width = percent + '%';
+        })).url;
+      }
+
+      const song = {
+        title,
+        artist,
+        folder,
+        genre,
+        tags,
+        audioUrl: audioRes.url,
+        artworkUrl
+      };
+
+      if (editingIndex !== null) {
+        songs[editingIndex] = song;
+      } else {
+        songs.push(song);
+      }
+
+      form.classList.add('hidden');
+      form.reset();
+      artworkPreview.innerHTML = '';
+      progressContainer.classList.add('hidden');
+      progressBar.style.width = '0%';
+      editingIndex = null;
+      renderSongs();
+    } catch (err) {
+      console.error('Upload failed:', err);
+      alert('Upload failed. Please try again.');
+      progressContainer.classList.add('hidden');
+      progressBar.style.width = '0%';
     }
-
-    form.classList.add('hidden');
-    form.reset();
-    artworkPreview.innerHTML = '';
-    editingIndex = null;
-    renderSongs();
   };
 
   function renderSongs(filter = '') {
